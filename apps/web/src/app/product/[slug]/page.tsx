@@ -11,12 +11,15 @@ import {
   type PriceObservation,
 } from "@pricedekho/shared";
 import { PriceComparisonTable } from "@/components/PriceComparisonTable";
+import { JsonLd } from "@/components/JsonLd";
 import { PriceHistoryChart } from "@/components/PriceHistoryChart";
 import { ProductImage } from "@/components/ProductImage";
+import { ShareButtons } from "@/components/ShareButtons";
 import { EmptyState, ErrorState } from "@/components/States";
 import { Badge } from "@/components/ui/badge";
 import { getCatalog, getFreshnessConfig, getProductCached } from "@/lib/catalog";
 import { presentProduct, type PresentedProduct } from "@/lib/present";
+import { absoluteUrl, breadcrumbJsonLd, OPEN_GRAPH_BASE } from "@/lib/seo";
 import { cn } from "@/lib/utils";
 
 export const revalidate = 300;
@@ -37,13 +40,19 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const product = await load((await params).slug).catch(() => null);
   if (!product) return { title: "Product not found" };
   const variant = formatVariantLabel(product.variantAttributes);
+  const description = `Compare prices for ${product.name}${variant ? ` (${variant})` : ""} across online stores in India.`;
+  const url = `/product/${product.slug}`;
   return {
     title: `${product.name} — compare prices`,
-    description: `Compare prices for ${product.name}${variant ? ` (${variant})` : ""} across online stores in India.`,
-    alternates: { canonical: `/product/${product.slug}` },
+    description,
+    keywords: [product.name, `${product.name} price`, `${product.name} price in India`, product.brand, product.category.name].filter(
+      (k): k is string => Boolean(k),
+    ),
+    alternates: { canonical: url },
     // Demo products must not be indexed as if they were real listings.
     robots: product.isDemo ? { index: false, follow: false } : undefined,
-    openGraph: { title: product.name, type: "website", url: `/product/${product.slug}` },
+    openGraph: { ...OPEN_GRAPH_BASE, title: `${product.name} — compare prices`, description, url },
+    twitter: { card: "summary_large_image", title: `${product.name} — compare prices`, description },
   };
 }
 
@@ -101,6 +110,7 @@ function productJsonLd(presented: PresentedProduct, url: string) {
     ...(product.gtin ? { gtin: product.gtin } : {}),
     ...(product.description ? { description: product.description } : {}),
     url,
+    ...(product.imageUrl ? { image: absoluteUrl(product.imageUrl) } : {}),
     // Offers are only described for verified live data — never for demo or stale prices.
     ...(live.length > 0
       ? {
@@ -141,10 +151,15 @@ export default async function ProductPage({ params }: Props) {
 
   return (
     <article>
-      {/* JSON.stringify output is safe in a script tag once "<" is escaped. */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd(presented, `/product/${product.slug}`)).replace(/</g, "\\u003c") }}
+      <JsonLd
+        data={[
+          productJsonLd(presented, absoluteUrl(`/product/${product.slug}`)),
+          breadcrumbJsonLd([
+            { name: "Home", path: "/" },
+            { name: product.category.name, path: `/categories/${product.category.slug}` },
+            { name: product.name, path: `/product/${product.slug}` },
+          ]),
+        ]}
       />
       <nav aria-label="Breadcrumb" className="mb-4 text-sm text-slate-500">
         <ol className="flex flex-wrap items-center gap-1">
@@ -198,6 +213,7 @@ export default async function ProductPage({ params }: Props) {
             <LowestPriceSummary presented={presented} />
           </div>
           {product.description && <p className="mt-4 text-sm leading-relaxed text-slate-700">{product.description}</p>}
+          <ShareButtons className="mt-5" url={absoluteUrl(`/product/${product.slug}`)} title={`${product.name} — compare prices on PriceDekho`} />
         </div>
       </div>
 

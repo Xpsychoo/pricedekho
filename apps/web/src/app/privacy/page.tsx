@@ -1,7 +1,13 @@
 import type { Metadata } from "next";
+import { OPEN_GRAPH_BASE } from "@/lib/seo";
 import { InfoPage } from "@/components/InfoPage";
 
-export const metadata: Metadata = { title: "Privacy policy", alternates: { canonical: "/privacy" } };
+export const metadata: Metadata = {
+  title: "Privacy policy",
+  description: "How PriceDekho collects, uses and protects your data.",
+  alternates: { canonical: "/privacy" },
+  openGraph: { ...OPEN_GRAPH_BASE, url: "/privacy", title: "Privacy policy | PriceDekho", description: "How PriceDekho collects, uses and protects your data." },
+};
 
 export default function PrivacyPage() {
   return (

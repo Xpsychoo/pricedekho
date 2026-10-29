@@ -5,9 +5,11 @@ import { Suspense } from "react";
 import { getCategoryDefinition, parseSearchQuery, slugSchema } from "@pricedekho/shared";
 import { CategoryIcon } from "@/components/CategoryIcon";
 import { CategoryNavigation } from "@/components/CategoryNavigation";
+import { JsonLd } from "@/components/JsonLd";
 import { SearchResults } from "@/components/SearchResults";
 import { ErrorState, LoadingSkeleton } from "@/components/States";
 import { getCatalog, getCategoryCached } from "@/lib/catalog";
+import { breadcrumbJsonLd, OPEN_GRAPH_BASE } from "@/lib/seo";
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -23,10 +25,14 @@ async function loadCategory(rawSlug: string) {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const category = await loadCategory((await params).slug).catch(() => null);
   if (!category) return { title: "Category not found" };
+  const title = `${category.name} — compare prices`;
+  const description = category.description ?? `Compare ${category.name.toLowerCase()} prices across Indian online stores.`;
+  const url = `/categories/${category.slug}`;
   return {
-    title: `${category.name} — compare prices`,
-    description: category.description ?? `Compare ${category.name.toLowerCase()} prices across Indian online stores.`,
-    alternates: { canonical: `/categories/${category.slug}` },
+    title,
+    description,
+    alternates: { canonical: url },
+    openGraph: { ...OPEN_GRAPH_BASE, url, title: `${title} | PriceDekho`, description },
   };
 }
 
@@ -44,6 +50,13 @@ export default async function CategoryPage({ params, searchParams }: Props) {
   const definition = getCategoryDefinition(category.slug);
   return (
     <div>
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: "Home", path: "/" },
+          { name: "Categories", path: "/categories" },
+          { name: category.name, path: `/categories/${category.slug}` },
+        ])}
+      />
       <CategoryNavigation activeSlug={category.slug} className="-mx-1 mb-6 md:hidden" />
       <header className="mb-6 flex items-start gap-4">
         <span className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-brand-700">

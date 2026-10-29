@@ -1,7 +1,13 @@
 import type { Metadata } from "next";
+import { OPEN_GRAPH_BASE } from "@/lib/seo";
 import { InfoPage } from "@/components/InfoPage";
 
-export const metadata: Metadata = { title: "About", alternates: { canonical: "/about" } };
+export const metadata: Metadata = {
+  title: "About",
+  description: "About PriceDekho — an independent price comparison site for Indian online shoppers that labels every price's source and freshness.",
+  alternates: { canonical: "/about" },
+  openGraph: { ...OPEN_GRAPH_BASE, url: "/about", title: "About | PriceDekho", description: "About PriceDekho — an independent price comparison site for Indian online shoppers that labels every price's source and freshness." },
+};
 
 export default function AboutPage() {
   return (

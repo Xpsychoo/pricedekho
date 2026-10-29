@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { OPEN_GRAPH_BASE } from "@/lib/seo";
 import { PriceStatusLabel } from "@/components/PriceStatusLabel";
 import { InfoPage } from "@/components/InfoPage";
 import { getFreshnessConfig } from "@/lib/catalog";
@@ -7,6 +8,7 @@ export const metadata: Metadata = {
   title: "How it works",
   description: "How PriceDekho compares prices, where the data comes from and how fresh it is.",
   alternates: { canonical: "/how-it-works" },
+  openGraph: { ...OPEN_GRAPH_BASE, url: "/how-it-works", title: "How it works | PriceDekho", description: "How PriceDekho compares prices, where the data comes from and how fresh it is." },
 };
 
 export default function HowItWorksPage() {

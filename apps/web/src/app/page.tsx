@@ -1,15 +1,24 @@
 import { ArrowRight, BadgeCheck, Clock, Search, TrendingUp } from "lucide-react";
+import type { Metadata } from "next";
 import Link from "next/link";
 import { CATEGORY_DEFINITIONS } from "@pricedekho/shared";
 import { DEMO_TRENDING_SEARCHES } from "@pricedekho/shared/demo";
 import { CategoryIcon } from "@/components/CategoryIcon";
+import { JsonLd } from "@/components/JsonLd";
 import { ProductGrid } from "@/components/ProductGrid";
 import { SearchBar } from "@/components/SearchBar";
 import { EmptyState, ErrorState } from "@/components/States";
 import { Badge } from "@/components/ui/badge";
 import { getCatalog } from "@/lib/catalog";
+import { OPEN_GRAPH_BASE, organizationJsonLd, websiteJsonLd } from "@/lib/seo";
+import { SITE } from "@/lib/site";
 
 export const revalidate = 300;
+
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+  openGraph: { ...OPEN_GRAPH_BASE, url: "/", title: `${SITE.name} — ${SITE.tagline}`, description: SITE.description },
+};
 
 const STEPS = [
   { Icon: Search, title: "Search for the exact product", text: "Find the model and variant you want — storage, size and colour matter." },
@@ -29,6 +38,7 @@ async function FeaturedProducts() {
 export default function HomePage() {
   return (
     <div className="space-y-12">
+      <JsonLd data={[organizationJsonLd(), websiteJsonLd()]} />
       <section className="rounded-2xl border border-slate-200 bg-linear-to-b from-white to-brand-50/60 px-5 py-10 text-center sm:px-10 sm:py-14">
         <h1 className="mx-auto max-w-2xl text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
           Compare prices across Indian online stores

@@ -1,8 +1,14 @@
 import Link from "next/link";
 import { CATEGORY_DEFINITIONS } from "@pricedekho/shared";
+import { getSocialProfiles } from "@/lib/seo";
 import { FOOTER_LINKS, SITE } from "@/lib/site";
 
+function profileLabel(url: string): string {
+  return new URL(url).hostname.replace(/^www\./, "");
+}
+
 export function Footer() {
+  const profiles = getSocialProfiles();
   return (
     <footer className="mt-16 border-t border-slate-200 bg-white">
       <div className="mx-auto grid max-w-7xl gap-8 px-4 py-10 sm:px-6 md:grid-cols-3">
@@ -11,6 +17,17 @@ export function Footer() {
             Price<span className="text-brand-600">Dekho</span>
           </p>
           <p className="mt-2 max-w-xs text-sm text-slate-600">{SITE.tagline}.</p>
+          {profiles.length > 0 && (
+            <ul aria-label="Follow PriceDekho" className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-sm">
+              {profiles.map((url) => (
+                <li key={url}>
+                  <a href={url} target="_blank" rel="noopener noreferrer me" className="text-slate-600 hover:text-brand-700">
+                    {profileLabel(url)}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
         <nav aria-label="Footer categories">
           <p className="text-sm font-semibold text-slate-900">Categories</p>

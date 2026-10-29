@@ -66,6 +66,9 @@ export function getServerEnv(): ServerEnv {
 }
 
 export function getSiteUrl(): string {
-  const raw = process.env.NEXT_PUBLIC_SITE_URL || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000");
+  // VERCEL_PROJECT_PRODUCTION_URL is the production domain; VERCEL_URL is per-deployment
+  // and would leak preview hostnames into canonical URLs, so it is only a last resort.
+  const vercelHost = process.env.VERCEL_PROJECT_PRODUCTION_URL || process.env.VERCEL_URL;
+  const raw = process.env.NEXT_PUBLIC_SITE_URL || (vercelHost ? `https://${vercelHost}` : "http://localhost:3000");
   return raw.replace(/\/+$/, "");
 }

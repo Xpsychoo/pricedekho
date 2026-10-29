@@ -1,7 +1,13 @@
 import type { Metadata } from "next";
+import { OPEN_GRAPH_BASE } from "@/lib/seo";
 import { InfoPage } from "@/components/InfoPage";
 
-export const metadata: Metadata = { title: "Terms of use", alternates: { canonical: "/terms" } };
+export const metadata: Metadata = {
+  title: "Terms of use",
+  description: "The terms that apply when you use PriceDekho to compare product prices.",
+  alternates: { canonical: "/terms" },
+  openGraph: { ...OPEN_GRAPH_BASE, url: "/terms", title: "Terms of use | PriceDekho", description: "The terms that apply when you use PriceDekho to compare product prices." },
+};
 
 export default function TermsPage() {
   return (

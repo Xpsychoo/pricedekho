@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { OPEN_GRAPH_BASE } from "@/lib/seo";
 import Link from "next/link";
 import { CATEGORY_DEFINITIONS } from "@pricedekho/shared";
 import { CategoryIcon } from "@/components/CategoryIcon";
@@ -7,6 +8,7 @@ export const metadata: Metadata = {
   title: "All categories",
   description: "Browse product categories and compare prices across Indian online stores.",
   alternates: { canonical: "/categories" },
+  openGraph: { ...OPEN_GRAPH_BASE, url: "/categories", title: "All categories | PriceDekho", description: "Browse product categories and compare prices across Indian online stores." },
 };
 
 export default function CategoriesPage() {

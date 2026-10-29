@@ -1,7 +1,13 @@
 import type { Metadata } from "next";
+import { OPEN_GRAPH_BASE } from "@/lib/seo";
 import { InfoPage } from "@/components/InfoPage";
 
-export const metadata: Metadata = { title: "Affiliate disclosure", alternates: { canonical: "/affiliate-disclosure" } };
+export const metadata: Metadata = {
+  title: "Affiliate disclosure",
+  description: "How PriceDekho earns money from store links and why commissions never change price ranking.",
+  alternates: { canonical: "/affiliate-disclosure" },
+  openGraph: { ...OPEN_GRAPH_BASE, url: "/affiliate-disclosure", title: "Affiliate disclosure | PriceDekho", description: "How PriceDekho earns money from store links and why commissions never change price ranking." },
+};
 
 export default function AffiliateDisclosurePage() {
   return (
