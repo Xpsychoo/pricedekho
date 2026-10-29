@@ -28,10 +28,10 @@ export function generateSeedSql(): string {
     DEMO_STORES.map((s) => `  (${lit(s.id)}, ${lit(s.slug)}, ${lit(s.name)}, ${lit(s.websiteUrl)}, true, true, ${lit(DEMO_CREATED_AT)})`).join(",\n") +
       "\non conflict (slug) do nothing;",
     "",
-    "insert into public.products (id, category_id, slug, name, brand, model, description, specifications, variant_attributes, variant_key, is_demo, created_at, updated_at) values",
+    "insert into public.products (id, category_id, slug, name, brand, model, description, image_url, specifications, variant_attributes, variant_key, is_demo, created_at, updated_at) values",
     DEMO_PRODUCTS.map(
       (p) =>
-        `  (${lit(p.id)}, ${lit(p.categoryId)}, ${lit(p.slug)}, ${lit(p.name)}, ${lit(p.brand)}, ${lit(p.model)}, ${lit(p.description)}, ` +
+        `  (${lit(p.id)}, ${lit(p.categoryId)}, ${lit(p.slug)}, ${lit(p.name)}, ${lit(p.brand)}, ${lit(p.model)}, ${lit(p.description)}, ${lit(p.imageUrl)}, ` +
         `${json(p.specifications)}, ${json(p.variantAttributes)}, ${lit(p.variantKey)}, true, ${lit(DEMO_CREATED_AT)}, ${lit(DEMO_CREATED_AT)})`,
     ).join(",\n") + "\non conflict (slug) do nothing;",
     "",

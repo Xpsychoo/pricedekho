@@ -46,6 +46,8 @@ export interface DemoProduct {
   brand: string;
   model: string;
   description: string;
+  /** Original illustration served by the web app (not a product photo). */
+  imageUrl: string;
   specifications: Record<string, string>;
   variantAttributes: Record<string, string>;
   variantKey: string;
@@ -53,6 +55,9 @@ export interface DemoProduct {
 }
 
 export const DEMO_PROVIDER_ID = "demo";
+
+/** Same-origin path of the demo product illustrations (apps/web/public/demo-images). */
+export const DEMO_IMAGE_BASE = "/demo-images";
 
 /** Fixed creation time so generated SQL and tests are deterministic. */
 export const DEMO_CREATED_AT = "2026-10-29T00:00:00.000Z";
@@ -257,6 +262,7 @@ export const DEMO_PRODUCTS: DemoProduct[] = PRODUCTS.map((p, productIndex) => {
     brand: p.brand,
     model: p.model,
     description: p.description,
+    imageUrl: `${DEMO_IMAGE_BASE}/${p.slug}.svg`,
     specifications: p.specifications,
     variantAttributes,
     variantKey,

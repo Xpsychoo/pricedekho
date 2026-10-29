@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+<defs>
+<radialGradient id="bg" cx="50%" cy="42%" r="65%"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#e0f2fe"/></radialGradient>
+<linearGradient id="sheen" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".22"/><stop offset=".5" stop-color="#fff" stop-opacity="0"/></linearGradient>
+<linearGradient id="steel" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#9ca3af"/><stop offset=".35" stop-color="#e5e7eb"/><stop offset=".7" stop-color="#cbd5e1"/><stop offset="1" stop-color="#8b95a3"/></linearGradient>
+</defs>
+<rect width="400" height="400" fill="url(#bg)"/>
+<ellipse cx="200" cy="338" rx="125" ry="11" fill="#0f172a" opacity=".09"/>
+
+<path d="M142 86 L176 76 Q200 96 224 76 L258 86 L322 128 L296 178 L266 162 V322 Q266 330 258 330 H142 Q134 330 134 322 V162 L104 178 L78 128 Z" fill="#1e3a5f"/>
+<path d="M142 86 L176 76 Q200 96 224 76 L258 86 L322 128 L296 178 L266 162 V322 Q266 330 258 330 H142 Q134 330 134 322 V162 L104 178 L78 128 Z" fill="url(#sheen)"/>
+<path d="M176 76 L198 116 L170 110 Z" fill="#e2e8f0"/><path d="M224 76 L202 116 L230 110 Z" fill="#e2e8f0"/>
+<rect x="194" y="98" width="12" height="54" rx="2" fill="#000" opacity=".15"/>
+<circle cx="200" cy="118" r="3" fill="#e5e7eb"/><circle cx="200" cy="138" r="3" fill="#e5e7eb"/>
+<path d="M104 178 L110 166 L132 156" fill="none" stroke="#e2e8f0" stroke-width="5"/><path d="M296 178 L290 166 L268 156" fill="none" stroke="#e2e8f0" stroke-width="5"/>
+</svg>

@@ -9,8 +9,14 @@ const allowedHosts = new Set(
     .filter(Boolean),
 );
 
+/** Same-origin asset such as /demo-images/x.svg (never protocol-relative "//"). */
+function isLocal(url: string): boolean {
+  return url.startsWith("/") && !url.startsWith("//");
+}
+
 function isPermitted(url: string | null): url is string {
   if (!url) return false;
+  if (isLocal(url)) return true;
   try {
     const u = new URL(url);
     return u.protocol === "https:" && allowedHosts.has(u.hostname);
@@ -20,8 +26,10 @@ function isPermitted(url: string | null): url is string {
 }
 
 /**
- * Shows a product image only when it comes from a host we are permitted to
- * display (IMAGE_REMOTE_HOSTS); otherwise a neutral category placeholder.
+ * Shows a product image only when it is a bundled asset or comes from a host
+ * we are permitted to display (IMAGE_REMOTE_HOSTS); otherwise a neutral
+ * category placeholder. Bundled assets are our own illustrations, so they are
+ * labelled as such rather than passed off as product photos.
  */
 export function ProductImage({
   src,
@@ -41,7 +49,21 @@ export function ProductImage({
   return (
     <div className={cn("relative aspect-square overflow-hidden rounded-lg bg-slate-100", className)}>
       {isPermitted(src) ? (
-        <Image src={src} alt={alt} fill sizes={sizes} priority={priority} className="object-contain p-4" />
+        <>
+          <Image
+            src={src}
+            alt={alt}
+            fill
+            sizes={sizes}
+            priority={priority}
+            // Bundled SVG illustrations are served as-is; the optimiser rejects SVG.
+            unoptimized={isLocal(src) && src.endsWith(".svg")}
+            className="object-contain p-4"
+          />
+          {isLocal(src) && (
+            <span className="absolute bottom-1.5 left-1.5 rounded bg-white/85 px-1.5 py-0.5 text-[10px] font-medium text-slate-500">Illustration</span>
+          )}
+        </>
       ) : (
         <div className="flex h-full w-full flex-col items-center justify-center gap-2 text-slate-400" role="img" aria-label={`${alt} — image not available`}>
           <CategoryIcon slug={categorySlug} className="h-10 w-10" strokeWidth={1.5} />
